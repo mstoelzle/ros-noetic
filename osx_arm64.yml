@@ -1,0 +1,49 @@
+pool:
+  vmImage: macOS-11
+trigger:
+- buildbranch_osx_arm64
+pr: none
+stages:
+- stage: stage_0
+  jobs:
+  - job: stage_0_job_0
+    steps:
+    - script: |-
+        export CI=azure
+        export GIT_BRANCH=$BUILD_SOURCEBRANCHNAME
+        export FEEDSTOCK_NAME=$(basename ${BUILD_REPOSITORY_NAME})
+        .scripts/build_osx_arm64.sh
+      env:
+        ANACONDA_API_TOKEN: $(ANACONDA_API_TOKEN)
+        CURRENT_RECIPES: ros-noetic-laser-geometry ros-noetic-robot-state-publisher
+          ros-noetic-tf-conversions ros-noetic-image-proc ros-noetic-depth-image-proc
+      displayName: Build ros-noetic-laser-geometry ros-noetic-robot-state-publisher
+        ros-noetic-tf-conversions ros-noetic-image-proc ros-noetic-depth-image-proc
+- stage: stage_1
+  jobs:
+  - job: stage_1_job_0
+    steps:
+    - script: |-
+        export CI=azure
+        export GIT_BRANCH=$BUILD_SOURCEBRANCHNAME
+        export FEEDSTOCK_NAME=$(basename ${BUILD_REPOSITORY_NAME})
+        .scripts/build_osx_arm64.sh
+      env:
+        ANACONDA_API_TOKEN: $(ANACONDA_API_TOKEN)
+        CURRENT_RECIPES: ros-noetic-laser-filters ros-noetic-laser-assembler ros-noetic-stereo-image-proc
+          ros-noetic-geometry
+      displayName: Build ros-noetic-laser-filters ros-noetic-laser-assembler ros-noetic-stereo-image-proc
+        ros-noetic-geometry
+- stage: stage_2
+  jobs:
+  - job: stage_2_job_0
+    steps:
+    - script: |-
+        export CI=azure
+        export GIT_BRANCH=$BUILD_SOURCEBRANCHNAME
+        export FEEDSTOCK_NAME=$(basename ${BUILD_REPOSITORY_NAME})
+        .scripts/build_osx_arm64.sh
+      env:
+        ANACONDA_API_TOKEN: $(ANACONDA_API_TOKEN)
+        CURRENT_RECIPES: ros-noetic-robot ros-noetic-laser-pipeline ros-noetic-image-pipeline
+      displayName: Build ros-noetic-robot ros-noetic-laser-pipeline ros-noetic-image-pipeline
